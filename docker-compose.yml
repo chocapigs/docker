@@ -1,0 +1,39 @@
+version: '2'
+
+services:
+  webarchivage:
+    build: ./Archivage/apache
+#   image: chocapigs/archivage
+    ports:
+      - "8888:80"
+    volumes:
+      - ./src/Archivage:/var/www
+      - ./Archivage/vhost:/etc/apache2/sites-enabled
+    networks:
+      - default
+    user: "www-data"
+  db:
+    build: ./Archivage/postgres
+#    image: postgres:9.4
+    environment:
+      DATABASE_NAME: archivage
+      POSTGRES_USER_OTHER: nextoo
+      POSTGRES_PASSWORD_OTHER: 8yd3SughH8ia8tef
+      POSTGRES_USER_SNOW: snowflex
+      POSTGRES_PASSWORD_SNOW: snowflexArch_62
+    networks:
+      - default
+    dns_search:
+      - db
+
+  adminer:
+    image: clue/adminer
+    ports:
+      - "2002:80"
+    networks:
+      - default
+    dns_search:
+      - adminer
+
+networks:
+  default: {}
